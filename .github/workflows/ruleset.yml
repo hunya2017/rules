@@ -44,7 +44,7 @@ jobs:
 
     - name: Commit and Push
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
       run: |
         # 设置Git用户信息
         git config --global user.name 'GitHub Action'
