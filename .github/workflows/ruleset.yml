@@ -55,7 +55,7 @@ jobs:
         cd ruleset
         # 上传二进制规则
         git init
-        git remote add origin https://github-action:$GITHUB_TOKEN@github.com/hunya2017/rules.git
+        git remote add origin  https://x-access-token:${PAT_TOKEN}@github.com/hunya2017/rules.git
         git branch -M ruleset
         git add .
         git commit -m "Update ruleset"
