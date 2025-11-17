@@ -3,7 +3,7 @@ name: Compile and Push RuleSet
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *' # 每天在 GMT+8 时间 8:00 AM 运行
+  - cron: '0 0 * * *' # 每天在 GMT+8 时间 8:00 AM 运行
 
 jobs:
   build-and-push-ruleset:
@@ -55,7 +55,7 @@ jobs:
         cd ruleset
         # 上传二进制规则
         git init
-        git remote add origin https://github-action:$GITHUB_TOKEN@github.com/DDCHlsq/sing-ruleset.git
+        git remote add origin https://github-action:$GITHUB_TOKEN@github.com/hunya2017/rules.git
         git branch -M ruleset
         git add .
         git commit -m "Update ruleset"
