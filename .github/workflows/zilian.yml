@@ -1,0 +1,94 @@
+name: Build and Release SRS
+
+on:
+  push:
+    branches:
+    - main
+    paths:
+    - 'rules/**'
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    name: Compile RuleSet to SRS
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest ]
+
+    steps:
+    # 1. Checkout repository
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # 2. Install sing-box
+    - name: Install sing-box
+      if: runner.os == 'Linux'
+      run: |
+        curl -L https://github.com/SagerNet/sing-box/releases/latest/download/sing-box-linux-amd64.gz -o sing-box.gz
+        gunzip sing-box.gz
+        chmod +x sing-box
+        sudo mv sing-box /usr/local/bin/
+    - name: Install sing-box
+      if: runner.os == 'Windows'
+      run: |
+        curl -L https://github.com/SagerNet/sing-box/releases/latest/download/sing-box-windows-amd64.zip -o sing-box.zip
+        powershell -Command "Expand-Archive sing-box.zip -DestinationPath ."
+        mv sing-box.exe sing-box.exe
+
+    # 3. Compile all rules in rules/ folder (split per OS)
+    - name: Compile all rules to SRS (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        mkdir -p rules/srs
+        sing-box rule-set compile -o rules/srs/all.srs rules/*.json rules/*.txt || true
+
+    - name: Compile all rules to SRS (Windows)
+      if: runner.os == 'Windows'
+      shell: powershell
+      run: |
+        New-Item -ItemType Directory -Force -Path rules\srs | Out-Null
+        .\sing-box.exe rule-set compile -o rules\srs\all.srs rules\*.json rules\*.txt || exit 0
+
+    # 4. Upload SRS as artifact (optional)
+    - name: Upload SRS artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: all-srs
+        path: rules/srs/all.srs
+
+  release:
+    name: Release SRS
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Download SRS artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: all-srs
+        path: rules/srs
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: srs-${{ github.run_number }}
+        release_name: SRS Rules ${{ github.run_number }}
+        draft: false
+        prerelease: false
+
+    - name: Upload release asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: rules/srs/all.srs
+        asset_name: all.srs
+        asset_content_type: application/octet-stream
