@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "domain": [],
+      "domain_suffix": [
+        "kwaionline.com",
+        "kuaishouzt.com"
+      ],
+      "ip_cidr": [],
+      "invert": false
+    }
+  ]
+}
