@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "domain": [],
+      "domain_suffix": [],
+      "ip_cidr": ["103.167.27.143/32"],
+      "invert": false
+    }
+  ]
+}
