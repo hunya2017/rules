@@ -4,8 +4,8 @@
     {
       "domain": [],
       "domain_suffix": [
-        ".kwaionline.com",
-        ".kuaishouzt.com"
+        "kwaionline.com",
+        "kuaishouzt.com"
       ],
       "invert": false
     }
