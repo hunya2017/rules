@@ -46,8 +46,19 @@ jobs:
         mkdir -p rules/srs
         sing-box rule-set compile -o rules/srs/all.srs rules/*.json rules/*.txt || true
 
-    # 4. Upload SRS as artifact (optional)
+    # 4. Show artifact and upload SRS as artifact (optional)
+    - name: Show generated SRS files
+      run: |
+        echo "Listing rules/srs"
+        ls -la rules/srs || true
+        if [ -f rules/srs/all.srs ]; then
+          echo "File exists: $(stat -c%s rules/srs/all.srs) bytes"
+        else
+          echo "File rules/srs/all.srs not found"
+        fi
+
     - name: Upload SRS artifact
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: all-srs
