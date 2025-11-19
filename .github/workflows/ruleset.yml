@@ -50,7 +50,9 @@ jobs:
         git config --global user.email 'action@github.com'
 
         mkdir ruleset
-        mv *.srs ruleset
+        # Move compiled .srs files and JSON files into ruleset for pushing.
+        # Use a single mv and ignore errors if no files match.
+        mv *.srs *.json ruleset || true
         cd ruleset
 
         git init
