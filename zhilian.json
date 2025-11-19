@@ -7,7 +7,9 @@
         ".kwaionline.com",
         ".kuaishouzt.com"
       ],
-      "ip_cidr": [],
+      "ip_cidr": [
+        "103.167.27.143"
+      ],
       "invert": false
     }
   ]
