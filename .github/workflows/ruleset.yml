@@ -32,16 +32,14 @@ jobs:
 
     - name: Install sing-box
       run: |
-        wget https://github.com/SagerNet/sing-box/releases/download/v${SING_BOX_VERSION}/sing-box-${SING_BOX_VERSION}-linux-amd64.tar.gz
-        tar -xzf sing-box-${SING_BOX_VERSION}-linux-amd64.tar.gz
-        echo "$PWD/sing-box-${SING_BOX_VERSION}-linux-amd64" >> $GITHUB_PATH
+        wget https://github.com/SagerNet/sing-box/releases/download/v${{ env.SING_BOX_VERSION }}/sing-box-${{ env.SING_BOX_VERSION }}-linux-amd64.tar.gz
+        tar -xzf sing-box-${{ env.SING_BOX_VERSION }}-linux-amd64.tar.gz
+        echo "$PWD/sing-box-${{ env.SING_BOX_VERSION }}-linux-amd64" >> $GITHUB_PATH
 
     - name: Compile JSON to SRS
       run: |
-        # Only find JSON files inside the `rules` directory
-        find ./rules -type f -name '*.json' -print0 | while IFS= read -r -d '' file; do
-          outfile="$(basename "$file" .json).srs"
-          "$PWD/sing-box-${SING_BOX_VERSION}-linux-amd64/sing-box" rule-set compile --output "$outfile" "$file"
+        for file in $(ls *.json); do
+          ./sing-box-${{ env.SING_BOX_VERSION }}-linux-amd64/sing-box rule-set compile --output "${file%.json}.srs" "$file"
         done
 
     - name: Commit and Push
