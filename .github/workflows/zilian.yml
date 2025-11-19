@@ -41,10 +41,31 @@ jobs:
         tar -xzf sing-box-${SING_BOX_VERSION}-linux-amd64.tar.gz
         echo "$PWD/sing-box-${SING_BOX_VERSION}-linux-amd64" >> $GITHUB_PATH
 
-    - name: Compile all rules to SRS
+    - name: Compile rules to individual SRS files (Linux)
+      if: runner.os == 'Linux'
       run: |
         mkdir -p rules/srs
-        sing-box rule-set compile -o rules/srs/all.srs rules/*.json rules/*.txt || true
+        shopt -s nullglob || true
+        for f in rules/*.json rules/*.txt; do
+          [ -f "$f" ] || continue
+          name=$(basename "${f%.*}")
+          echo "Compiling $f -> rules/srs/${name}.srs"
+          sing-box rule-set compile -o "rules/srs/${name}.srs" "$f" || true
+        done
+
+    - name: Compile rules to individual SRS files (Windows)
+      if: runner.os == 'Windows'
+      shell: powershell
+      run: |
+        New-Item -ItemType Directory -Force -Path rules\srs | Out-Null
+        $files = Get-ChildItem -Path rules -Include *.json,*.txt -File -ErrorAction SilentlyContinue
+        if ($files) {
+          foreach ($f in $files) {
+            $out = "rules\\srs\\$($f.BaseName).srs"
+            Write-Output "Compiling $($f.FullName) -> $out"
+            .\sing-box.exe rule-set compile -o $out $($f.FullName) | Out-Null
+          }
+        } else { Write-Output 'No rule files found in rules\' }
 
     # 4. Show artifact and upload SRS as artifact (optional)
     - name: Show generated SRS files
