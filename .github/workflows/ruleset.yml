@@ -3,7 +3,7 @@ name: Compile and Push RuleSet
 on:
   workflow_dispatch:
   schedule:
-  - cron: '0 0 * * *' # 每天在 GMT+8 时间 8:00 AM 运行
+  - cron: '0 * * * *' # 每1小时运行一次
 
 jobs:
   build-and-push-ruleset:
