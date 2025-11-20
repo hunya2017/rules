@@ -2,13 +2,47 @@
   "version": 1,
   "rules": [
     {
-      "domain": [
-        "api.kuaishouzt.com"
-      ],
       "domain_suffix": [
-        "kwaionline.com"
+        "kuaishou.com",
+        "kwai.com",
+        "kwai.com.br",
+        "kwaionline.com",
+        "kuaishouzt.com",
+        "gifshow.com",
+        "yximgs.com",
+        "kwai.net",
+        "ksapisrv.com",
+        "ksapi-kodo.com",
+        "kspkg.com",
+        "ks-cdn.com",
+        "pstatp.com",
+        "ixigua.com",
+        "feidian.com",
+        "ks-ad.com",
+        "ksad-cdn.com",
+        "yximg.com",
+        "yximg.net",
+        "yximg.cn"
       ],
-      "invert": false
+      "ip_cidr": [
+        "120.53.0.0/16",
+        "120.92.0.0/16",
+        "120.221.0.0/16",
+        "114.236.0.0/16",
+        "103.38.56.0/22",
+        "103.82.172.0/22",
+        "103.167.0.0/23",
+        "103.167.26.0/24",
+        "103.167.27.0/24",
+        "36.110.0.0/16",
+        "36.155.0.0/16"
+      ],
+      "user_agent": [
+        "Kwai",
+        "Kwai-iOS",
+        "Kwai-Android",
+        "Kuaishou"
+      ]
     }
   ]
 }
