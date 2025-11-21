@@ -1,0 +1,98 @@
+{
+  "dns": {
+    "servers": [
+      { "tag": "local", "type": "udp", "server": "223.5.5.5" },
+      {
+        "tag": "public",
+        "type": "https",
+        "server": "dns.alidns.com",
+        "domain_resolver": "local"
+      },
+      {
+        "tag": "foreign",
+        "type": "https",
+        "server": "8.8.8.8",
+        "detour": "🚀 默认代理"
+      }
+    ],
+    "rules": [
+      { "clash_mode": "direct", "server": "local" },
+      { "clash_mode": "global", "server": "fakeip" },
+      {
+        "domain_suffix": [
+          "services.googleapis.cn",
+          "googleapis.cn",
+          "xn--ngstr-lra8j.com"
+        ],
+        "server": "foreign"
+      },
+      {
+        "rule_set": ["geosite-cn", "geosite-steamcn", "geosite-apple"],
+        "server": "local"
+      }
+    ],
+    "final": "foreign",
+    "strategy": "prefer_ipv6",
+    "independent_cache": true,
+    "reverse_mapping": true
+  },
+
+  "outbounds": [
+    ...(原样，不动)
+  ],
+
+  "route": {
+    "rules": [
+      {
+        "action": "sniff",
+        "sniffer": ["http", "tls", "quic", "dns"]
+      },
+      { "clash_mode": "direct", "outbound": "🎯 全球直连" },
+      { "clash_mode": "global", "outbound": "GLOBAL" },
+      { "inbound": "dns-in", "action": "hijack-dns" },
+      { "ip_is_private": true, "outbound": "🎯 全球直连" },
+      { "rule_set": "geosite-zhilian", "outbound": "🎯 全球直连" },
+      { "rule_set": "geosite-ai", "outbound": "🧠 AI" },
+      { "rule_set": "geosite-youtube", "outbound": "📹 YouTube" },
+      { "rule_set": "geosite-google", "outbound": "🍀 Google" },
+      { "rule_set": "geosite-github", "outbound": "👨‍💻 Github" },
+      { "rule_set": "geosite-onedrive", "outbound": "🐬 OneDrive" },
+      { "rule_set": "geosite-microsoft", "outbound": "🪟 Microsoft" },
+      { "rule_set": "geosite-apple", "outbound": "🍏 Apple" },
+      { "rule_set": "geosite-telegram", "outbound": "📲 Telegram" },
+      { "rule_set": "geosite-tiktok", "outbound": "🎵 TikTok" },
+      { "rule_set": "geosite-netflix", "outbound": "🎥 Netflix" },
+      { "rule_set": "geosite-paypal", "outbound": "💶 PayPal" },
+      { "rule_set": "geosite-steamcn", "outbound": "🎯 全球直连" },
+      { "rule_set": "geosite-steam", "outbound": "🎮 Steam" },
+      { "rule_set": "geosite-!cn", "outbound": "🚀 默认代理" },
+      { "rule_set": "geosite-cn", "outbound": "🎯 全球直连" },
+      { "action": "resolve" },
+      { "rule_set": "geoip-google", "outbound": "🍀 Google" },
+      { "rule_set": "geoip-apple", "outbound": "🍏 Apple" },
+      { "rule_set": "geoip-telegram", "outbound": "📲 Telegram" },
+      { "rule_set": "geoip-netflix", "outbound": "🎥 Netflix" },
+      { "rule_set": "geoip-cn", "outbound": "🎯 全球直连" },
+      { "rule_set": "geoip-zhilian", "outbound": "🎯 全球直连" }
+    ],
+
+    ...(后面 rule_set 配置全部保持不动)
+
+    "final": "🐠 漏网之鱼",
+    "default_domain_resolver": { "server": "public" }
+  },
+
+  "inbounds": [
+    ...(全部保持不变 — 这里的 sniff_override_destination 是合法的)
+  ],
+
+  "experimental": {
+    ...(不动)
+  },
+
+  "log": {
+    "disabled": false,
+    "level": "info",
+    "timestamp": true
+  }
+}
