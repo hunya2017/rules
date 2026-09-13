@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "domain_suffix": [
+        "kuaishou.com",
+        "kwai.com",
+        "kwai.com.br",
+        "kwaionline.com",
+        "kuaishouzt.com",
+        "gifshow.com",
+        "yximgs.com",
+        "kwai.net",
+        "ksapisrv.com",
+        "ksapi-kodo.com",
+        "kspkg.com",
+        "ks-cdn.com",
+        "pstatp.com",
+        "ixigua.com",
+        "feidian.com",
+        "ks-ad.com",
+        "ksad-cdn.com",
+        "yximg.com",
+        "yximg.net",
+        "yximg.cn",
+        "adkwai.com"
+      ]
+    }
+  ]
+}
